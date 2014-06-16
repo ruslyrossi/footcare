@@ -1,0 +1,21 @@
+<modification>
+	<id><![CDATA[Vertical Accordion Category Menu]]></id>
+	<version><![CDATA[1.0]]></version>
+	<vqmver><![CDATA[2.2.0]]></vqmver>
+	<author><![CDATA[<a onClick="window.open('http://www.opencart.com/index.php?route=extension/extension&filter_username=htcomtech');" title="View all OpenCart extension by htcomtech">htcomtech</a>]]></author>
+	<file name="catalog/view/theme/*/template/common/header.tpl">
+		<operation>
+			<search position="before" error="log"><![CDATA[</head>]]></search>
+			<add><![CDATA[<link rel="stylesheet" type="text/css" href="catalog/view/theme/default/stylesheet/dcaccordion.css"/>
+			]]></add>
+		</operation>
+		<operation>
+			<search position="after" error="log"><![CDATA[<script type="text/javascript" src="catalog/view/javascript/common.js"></script>]]></search>
+			<add><![CDATA[
+				<script type="text/javascript" src="catalog/view/javascript/jquery/jquery.dcjqaccordion.2.7.js"></script>
+				<script type="text/javascript" src="catalog/view/javascript/jquery/jquery.cookie.js"></script>
+				<script type="text/javascript" src="catalog/view/javascript/jquery/jquery.hoverIntent.minified.js"></script>
+			]]></add>
+		</operation>
+	</file>
+</modification>
