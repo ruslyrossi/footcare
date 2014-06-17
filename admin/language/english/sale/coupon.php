@@ -21,6 +21,7 @@ $_['column_date_added']   = 'Date Added';
 $_['column_action']       = 'Action';
 
 // Entry
+$_['entry_customer_type'] = 'Customer Type:';
 $_['entry_name']          = 'Coupon Name:';
 $_['entry_code']          = 'Code:<br /><span class="help">The code the customer enters to get the discount</span>';
 $_['entry_type']          = 'Type:<br /><span class="help">Percentage or Fixed Amount</span>';

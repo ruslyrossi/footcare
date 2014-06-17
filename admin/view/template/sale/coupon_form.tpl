@@ -23,6 +23,34 @@
         <div id="tab-general">
           <table class="form">
             <tr>
+              <td><span class="required">*</span> <?php echo $entry_customer_type; ?></td>
+              <td>
+              <?php
+			  if(isset($_GET['coupon_id'])) {
+				$new = '1';  
+			  } else {
+				$new = '0';  
+			  }
+			  ?>
+              <input type="radio" name="customer_type" <?php echo ($customer_type == 'all' || '0' == $new ? 'checked="checked"':''); ?> value="all" id="customer_all" /> For All Customer &nbsp;
+              <input type="radio" name="customer_type" <?php echo ($customer_type == 'specific'? 'checked="checked"':''); ?> value="specific" id="customer_specific" /> Specific Customer<br />
+              
+                  <input type="text" name="customer_name" id="customer_name" value="<?php echo $customer_name ?>" style="width:250px; margin-top:10px; <?php echo ($customer_type == 'all' || '0' == $new? '; display:none':''); ?>" placeholder="e.g : John Doe"/>
+                  <input type="hidden" name="customer_name_id" id="customer_name_id" value="<?php echo $customer_name_id ?>" />
+                  <a style="<?php echo ($customer_type == 'all' || '0' == $new? 'display:none':''); ?>" href="index.php?route=sale/customer/update&token=<?php echo $_GET['token']?>&customer_id=<?php echo $customer_name_id ?>" id="view_customer_details" target="_blank" title="This will open a new tab">View Customer Details</a>
+              
+              <script>
+			  $('#customer_specific').click(function() {
+				  $('#customer_name, #view_customer_details').show();
+			  });
+			  $('#customer_all').click(function() {
+				  $('#customer_name, #view_customer_details').hide();
+			  });
+			  </script>
+              </td>
+            </tr>
+            
+            <tr>
               <td><span class="required">*</span> <?php echo $entry_name; ?></td>
               <td><input name="name" value="<?php echo $name; ?>" />
                 <?php if ($error_name) { ?>
@@ -58,6 +86,23 @@
             <tr>
               <td><?php echo $entry_total; ?></td>
               <td><input type="text" name="total" value="<?php echo $total; ?>" /></td>
+            </tr>
+            <tr>
+              <td>For New Customer:<br />
+			  <span class="help">This coupon will include when new customer register</span></td>
+              <td>
+              <?php if ($new_customer == '1') { ?>
+              	<input type="radio" name="new_customer" value="1" checked="checked" />Yes&nbsp;
+              <?php } else { ?>
+                <input type="radio" name="new_customer" value="1" />Yes&nbsp;
+              <?php } ?>
+              
+              <?php if ($new_customer == '0') { ?>
+              	<input type="radio" name="new_customer" value="0" checked="checked" />No&nbsp;
+              <?php } else { ?>
+                <input type="radio" name="new_customer" value="0" <?php echo ('0' == $new ? 'checked="checked"':'') ?> />No&nbsp;
+              <?php } ?>
+              </td>
             </tr>
             <tr>
               <td><?php echo $entry_logged; ?></td>
@@ -181,6 +226,33 @@ $('input[name=\'category[]\']').bind('change', function() {
 		}
 	});
 });
+
+/* Customers Autocomplete */
+$('input[name=\'customer_name\']').autocomplete({
+	delay: 500,
+	source: function(request, response) {
+		$.ajax({
+			url: 'index.php?route=catalog/product/autocompleteCustomer&token=<?php echo $token; ?>&customer_name=' +  encodeURIComponent(request.term),
+			dataType: 'json',
+			success: function(json) {		
+				response($.map(json, function(item) {
+					return {
+						label: item.name,
+						value: item.customer_id
+					}
+				}));
+			}
+		});
+	},
+	select: function(event, ui) {
+		$('#customer_name').val(ui.item.label);
+		$('#customer_name_id').val(ui.item.value);
+		$("a#view_customer_details").attr("href", "index.php?route=sale/customer/update&token=<?php echo $_GET['token']?>&customer_id=" + ui.item.value)
+		
+		return false;
+	}
+});
+/**/
 
 $('input[name=\'product\']').autocomplete({
 	delay: 500,

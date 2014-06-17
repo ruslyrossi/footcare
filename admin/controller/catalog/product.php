@@ -1435,5 +1435,44 @@ class ControllerCatalogProduct extends Controller {
 
 		$this->response->setOutput(json_encode($json));
 	}
+	
+	public function autocompleteCustomer() {
+		$json = array();
+		
+		if (isset($this->request->get['customer_name'])) {
+			$this->load->model('catalog/product');
+			
+			if (isset($this->request->get['customer_name'])) {
+				$customer_name = $this->request->get['customer_name'];
+			} else {
+				$customer_name = '';
+			}
+
+			// Limit when dropdown
+			if (isset($this->request->get['limit'])) {
+				$limit = $this->request->get['limit'];	
+			} else {
+				$limit = 20;	
+			}			
+						
+			$data = array(
+				'customer_name'  => $customer_name,
+				'start'        => 0,
+				'limit'        => $limit
+			);
+			
+			$results = $this->model_catalog_product->getCustomers($data);
+			
+			foreach ($results as $result) {
+					
+				$json[] = array(
+					'customer_id' => $result['customer_id'],
+					'name'       => strip_tags(html_entity_decode($result['firstname'], ENT_QUOTES, 'UTF-8'))
+				);	
+			}
+		}
+
+		$this->response->setOutput(json_encode($json));
+	}	
 }
 ?>
