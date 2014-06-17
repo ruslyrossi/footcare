@@ -716,6 +716,11 @@ blockquote p {
 	height:25px;
 }
 
+.notice_quantity {
+  color: #3f7324;
+  margin-top: 5px;
+}
+
 @media screen and (max-width:1024px) {
 #header #search{margin:8px 0 0 0;}
 #header #search input{width:460px;}

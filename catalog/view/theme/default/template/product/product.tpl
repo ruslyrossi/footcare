@@ -84,16 +84,28 @@
           <span class="required">*</span>
           <?php } ?>
           <b><?php echo $option['name']; ?>:</b><br />
-          <select name="option[<?php echo $option['product_option_id']; ?>]">
+          <select id="option" name="option[<?php echo $option['product_option_id']; ?>]">
             <option value=""><?php echo $text_select; ?></option>
             <?php foreach ($option['option_value'] as $option_value) { ?>
-            <option value="<?php echo $option_value['product_option_value_id']; ?>"><?php echo $option_value['name']; ?>
+            <option data-quantity="<?php echo $option_value['quantity']; ?>" value="<?php echo $option_value['product_option_value_id']; ?>"><?php echo $option_value['name']; ?>
             <?php if ($option_value['price']) { ?>
             (<?php echo $option_value['price_prefix']; ?><?php echo $option_value['price']; ?>)
             <?php } ?>
             </option>
             <?php } ?>
           </select>
+          <div id="notice_quantity"></div>
+          <script>
+		  $('#option').change(function() {
+			 var id = $(this).find(':selected').data('quantity');
+			 
+			 if (id > 0) {
+			 	$('#notice_quantity').html('<div class="notice_quantity">Quantity left only ' + id + '</div>');
+			 } else {
+				 $('#notice_quantity').empty();
+			 }
+		  });
+		  </script>
         </div>
         <br />
         <?php } ?>
@@ -221,7 +233,7 @@
       <?php } ?>
       <div class="cart">
         <div><?php echo $text_qty; ?>
-          <input type="text" name="quantity" size="2" value="<?php echo $minimum; ?>" />
+          <input type="text" name="quantity" id="quantity" size="2" value="<?php echo $minimum; ?>" />
           <input type="hidden" name="product_id" size="2" value="<?php echo $product_id; ?>" />
           &nbsp;
           <input type="button" value="<?php echo $button_cart; ?>" id="button-cart" class="button" />
