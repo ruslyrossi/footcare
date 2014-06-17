@@ -67,12 +67,15 @@ class ControllerCommonContentBottom extends Controller {
 		array_multisort($sort_order, SORT_ASC, $module_data);
 
 		$this->data['modules'] = array();
-
+		
 		foreach ($module_data as $module) {
+			
+			$code = $module['code'];
+			
 			$module = $this->getChild('module/' . $module['code'], $module['setting']);
 
 			if ($module) {
-				$this->data['modules'][] = $module;
+				$this->data['modules'][] = array('content' => $module, 'code' => $code);
 			}
 		}
 

@@ -132,24 +132,47 @@ class ControllerCommonHeader extends Controller {
 				$children_data = array();
 
 				$children = $this->model_catalog_category->getCategories($category['category_id']);
-
+				
 				foreach ($children as $child) {
+					
+					$sister_data = array();
+                    $sisters = $this->model_catalog_category->getCategories($child['category_id']);
+					
 					$data = array(
 						'filter_category_id'  => $child['category_id'],
 						'filter_sub_category' => true
 					);
-
-
-					$children_data[] = array(
-						'name'  => $child['name'],
-						'href'  => $this->url->link('product/category', 'path=' . $category['category_id'] . '_' . $child['category_id'])
-					);						
+					
+					if ($sisters) {
+						
+                       foreach ($sisters as $sisterMember) {
+                          $sister_data[] = array(
+                             'category_id' =>$sisterMember['category_id'],
+                             'name'        => $sisterMember['name'],
+                             'href'        => $this->url->link('product/category', 'path=' . $category['category_id'] . '_' . $child['category_id']. '_' . $sisterMember['category_id'])   
+                          );                     
+                                     
+                       }
+                       $children_data[] = array(
+                             'category_id' => $child['category_id'],
+                             'sister_id'   => $sister_data,
+                             'name'        => $child['name'],
+                             'href'        => $this->url->link('product/category', 'path=' . $category['category_id'] . '_' . $child['category_id'])   
+                          );   
+                    } else {     
+	
+						$children_data[] = array(
+							'name'  => $child['name'],
+							'href'  => $this->url->link('product/category', 'path=' . $category['category_id'] . '_' . $child['category_id'])
+						);	
+					}
 				}
 
 				// Level 1
 				$this->data['categories'][] = array(
 					'name'     => $category['name'],
 					'children' => $children_data,
+					'sister'    => $sister_data,
 					'column'   => $category['column'] ? $category['column'] : 1,
 					'href'     => $this->url->link('product/category', 'path=' . $category['category_id'])
 				);

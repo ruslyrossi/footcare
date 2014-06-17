@@ -219,12 +219,6 @@ if ($this->config->get('bigshop_body_font') != '' ) {
 
 </div>
 
-<?php
-/*	echo '<pre>';
-	print_r($informations);
-	echo '</pre>';*/
-?>
-
 <?php if ($categories) { ?>
 <div id="menu">
 <span>Menu</span>
@@ -278,7 +272,22 @@ if ($this->config->get('bigshop_body_font') != '' ) {
                               <?php $j = $i + ceil(count($category['children']) / $category['column']); ?>
                               <?php for (; $i < $j; $i++) { ?>
 								  <?php if (isset($category['children'][$i])) { ?>
-                                    <li><a href="<?php echo $category['children'][$i]['href']; ?>"><?php echo $category['children'][$i]['name']; ?></a></li>
+                                    <li><a href="<?php echo $category['children'][$i]['href']; ?>"><?php echo $category['children'][$i]['name']; ?></a>
+										<?php if ($category['sister']) { ?>
+                                            <div class="sister">
+                                            <?php for ($i = 0; $i < count($category['sister']);) { ?>
+                                                <ul>
+                                                  <?php $j = $i + ceil(count($category['sister']) / $category['column']); ?>
+                                                  <?php for (; $i < $j; $i++) { ?>
+                                                      <?php if (isset($category['sister'][$i])) { ?>
+                                                        <li><a href="<?php echo $category['sister'][$i]['href']; ?>"><?php echo $category['sister'][$i]['name']; ?></a></li>
+                                                      <?php } ?>
+                                                  <?php } ?>
+                                                </ul>
+                                            <?php } ?>
+                                            </div>
+                                        <?php } ?>
+                                    </li>
                                   <?php } ?>
                               <?php } ?>
                             </ul>

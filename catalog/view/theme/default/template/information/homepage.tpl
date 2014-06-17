@@ -9,7 +9,7 @@
 		}
 		</style>
         
-        <div class="home_category_featured">
+<!--        <div class="home_category_featured">
         
         <div class="cols_4">
             <div class="category_img"><img src="image/home_cat_p1.jpg" /></div>
@@ -33,7 +33,7 @@
             <div class="category_img"><img src="image/home_cat_p4.jpg" /></div>
             <p class="category_title">Man Health Shoes </p>
             <p class="category_desc">Made for prolong standing and walking. Protects joints health and enhance comfort</p>
-        </div>
+        </div>-->
                 
     </div>
         <?php echo $content_bottom; ?>
