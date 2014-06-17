@@ -337,6 +337,11 @@ a.wishlist:hover { color:#F15A23; }
 .product-info .description a { color: #4D4D4D; text-decoration: none; font-size:13px; }
 .product-info .price { overflow: auto; border-bottom:1px dashed #e2e2e2; padding: 0px 5px 10px 5px; margin-bottom: 10px; font-size:18px; font-weight: bold; color: #F15A23; }
 .product-info .price-old { color: #F00; text-decoration: line-through; font-weight:normal; }
+.product-info .short_description {
+  color: #737373;
+  font-size: 13px;
+  font-weight: 400;
+}
 .product-info .price-new { }
 .product-info .price-tag{background:#F15A23 url(../image/price-tag.png) left top no-repeat; display:inline-block; height:48px; padding:0 18px 0 32px; border-radius:0px 3px 3px 0px; -moz-border-radius:0px 3px 3px 0px; -webkit-border-radius:0px 3px 3px 0px; line-height:48px; color:#fff; font-size:25px; font-weight:normal;}
 .product-info .price-tax { font-size: 12px; font-weight: normal; color: #999; }
