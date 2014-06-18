@@ -112,14 +112,14 @@
       </tr>-->
       <?php } ?>
       <?php if ($reward_status) { ?>
-      <!--<tr class="highlight">
+      <tr class="highlight">
         <td><?php if ($next == 'reward') { ?>
           <input type="radio" name="next" value="reward" id="use_reward" checked="checked" />
           <?php } else { ?>
           <input type="radio" name="next" value="reward" id="use_reward" />
           <?php } ?></td>
         <td><label for="use_reward"><?php echo $text_use_reward; ?></label></td>
-      </tr>-->
+      </tr>
       <?php } ?>
       <?php if ($shipping_status) { ?>
       <tr class="highlight">

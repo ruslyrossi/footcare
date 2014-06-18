@@ -345,7 +345,12 @@ a.wishlist:hover { color:#F15A23; }
 .product-info .price-new { }
 .product-info .price-tag{background:#F15A23 url(../image/price-tag.png) left top no-repeat; display:inline-block; height:48px; padding:0 18px 0 32px; border-radius:0px 3px 3px 0px; -moz-border-radius:0px 3px 3px 0px; -webkit-border-radius:0px 3px 3px 0px; line-height:48px; color:#fff; font-size:25px; font-weight:normal;}
 .product-info .price-tax { font-size: 12px; font-weight: normal; color: #999; }
-.product-info .price .reward { font-size: 12px; font-weight: normal; color: #999; }
+.product-info .price .reward {
+  color: #a23131;
+  font-size: 17px !important;
+  font-weight: normal;
+  display:block;
+}
 .product-info .price .discount { font-weight: normal; font-size: 12px; color: #4D4D4D; }
 .product-info .options { border-bottom: 1px solid #E7E7E7; padding: 0px 5px 10px 5px; margin-bottom: 10px; color: #333; }
 .product-info .option-image { margin-top: 3px; margin-bottom: 10px; }

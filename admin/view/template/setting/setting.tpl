@@ -218,6 +218,13 @@
                 <?php } ?></td>
             </tr>
           </table>
+          <h2><?php echo $text_reward; ?></h2>
+          <table class="form">
+            <tr>
+              <td><?php echo $entry_reward; ?></td>
+              <td>RM 1.00 = <input type="text" name="config_reward_rate" value="<?php echo $config_reward_rate; ?>" size="6" /></td>
+            </tr>
+          </table> 
           <h2><?php echo $text_product; ?></h2>
           <table class="form">
             <tr>

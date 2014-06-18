@@ -6,6 +6,7 @@ $_['heading_title']                = 'Settings';
 $_['text_success']                 = 'Success: You have modified settings!';
 $_['text_items']                   = 'Items';
 $_['text_product']                 = 'Products';
+$_['text_reward']                  = 'Reward Point';
 $_['text_voucher']                 = 'Vouchers';
 $_['text_tax']                     = 'Taxes';
 $_['text_account']                 = 'Account';
@@ -116,6 +117,7 @@ $_['entry_error_display']          = 'Display Errors:';
 $_['entry_error_log']              = 'Log Errors:';
 $_['entry_error_filename']         = 'Error Log Filename:';
 $_['entry_google_analytics']       = 'Google Analytics Code:<br /><span class="help">Login to your <a href="http://www.google.com/analytics/" target="_blank"><u>Google Analytics</u></a> account and after creating your web site profile copy and paste the analytics code into this field.</span>';
+$_['entry_reward']	  			   = 'Rate:<br /><span class="help">Example 100 point = RM1 and 1000 point = RM10</span>';
 
 // Error
 $_['error_warning']                = 'Warning: Please check the form carefully for errors!';

@@ -30,6 +30,7 @@ class ControllerSettingSetting extends Controller {
 		$this->data['text_yes'] = $this->language->get('text_yes');
 		$this->data['text_no'] = $this->language->get('text_no');
 		$this->data['text_items'] = $this->language->get('text_items');
+		$this->data['text_reward'] = $this->language->get('text_reward');
 		$this->data['text_product'] = $this->language->get('text_product');
 		$this->data['text_voucher'] = $this->language->get('text_voucher');
 		$this->data['text_tax'] = $this->language->get('text_tax');
@@ -140,6 +141,7 @@ class ControllerSettingSetting extends Controller {
 		$this->data['entry_error_log'] = $this->language->get('entry_error_log');
 		$this->data['entry_error_filename'] = $this->language->get('entry_error_filename');
 		$this->data['entry_google_analytics'] = $this->language->get('entry_google_analytics');
+		$this->data['entry_reward'] = $this->language->get('entry_reward');
 
 		$this->data['button_save'] = $this->language->get('button_save');
 		$this->data['button_cancel'] = $this->language->get('button_cancel');
@@ -494,6 +496,12 @@ class ControllerSettingSetting extends Controller {
 			$this->data['config_admin_limit'] = $this->request->post['config_admin_limit'];
 		} else {
 			$this->data['config_admin_limit'] = $this->config->get('config_admin_limit');
+		}
+		
+		if (isset($this->request->post['config_reward_rate'])) {
+			$this->data['config_reward_rate'] = $this->request->post['config_reward_rate'];
+		} else {
+			$this->data['config_reward_rate'] = $this->config->get('config_reward_rate');
 		}
 
 		if (isset($this->request->post['config_product_count'])) {

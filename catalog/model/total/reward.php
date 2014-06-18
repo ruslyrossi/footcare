@@ -3,10 +3,12 @@ class ModelTotalReward extends Model {
 	public function getTotal(&$total_data, &$total, &$taxes) {
 		if (isset($this->session->data['reward'])) {
 			$this->language->load('total/reward');
-
+			
+			$rate = $this->config->get('config_reward_rate');
+			
 			$points = $this->customer->getRewardPoints();
-
-			if ($this->session->data['reward'] <= $points) {
+			
+			if ($this->session->data['reward'] <= $points && !empty($rate)) {
 				$discount_total = 0;
 
 				$points_total = 0;
@@ -18,26 +20,8 @@ class ModelTotalReward extends Model {
 				}	
 
 				$points = min($points, $points_total);
-
-				foreach ($this->cart->getProducts() as $product) {
-					$discount = 0;
-
-					if ($product['points']) {
-						$discount = $product['total'] * ($this->session->data['reward'] / $points_total);
-
-						if ($product['tax_class_id']) {
-							$tax_rates = $this->tax->getRates($product['total'] - ($product['total'] - $discount), $product['tax_class_id']);
-
-							foreach ($tax_rates as $tax_rate) {
-								if ($tax_rate['type'] == 'P') {
-									$taxes[$tax_rate['tax_rate_id']] -= $tax_rate['amount'];
-								}
-							}	
-						}
-					}
-
-					$discount_total += $discount;
-				}
+				
+				$discount_total = (1 / $rate) * $this->session->data['reward'];
 
 				$total_data[] = array(
 					'code'       => 'reward',

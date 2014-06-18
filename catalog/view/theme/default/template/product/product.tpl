@@ -39,12 +39,11 @@
         <span class="price-old"><?php echo $price; ?></span> <span class="price-new"><?php echo $special; ?></span>
         <?php } ?>
         <br />
-        <span class="short_description"><?php echo $short_description; ?></span>
         <?php if ($tax) { ?>
         <!--<span class="price-tax"><?php echo $text_tax; ?> <?php echo $tax; ?></span><br />-->
         <?php } ?>
         <?php if ($points) { ?>
-        <span class="reward"><small><?php echo $text_points; ?> <?php echo $points; ?></small></span><br />
+        <span class="reward"><small><?php echo $text_points; ?> <?php echo $points; ?></small></span>
         <?php } ?>
         <?php if ($discounts) { ?>
         <br />
@@ -53,6 +52,9 @@
           <?php echo sprintf($text_discount, $discount['quantity'], $discount['price']); ?><br />
           <?php } ?>
         </div>
+        <?php } ?>
+        <?php if ($short_description) { ?>
+        <span class="short_description"><?php echo $short_description; ?></span>
         <?php } ?>
       </div>
       <?php } ?>
