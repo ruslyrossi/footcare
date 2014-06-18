@@ -33,7 +33,7 @@ $this->data['export'] = $this->url->link('sale/customer/export', 'token=' . $thi
         
         $this->load->model('sale/customer');
         
-        $customers_column = array('Customer ID', 'Customer Name', 'Email', 'Telephone', 'Address', 'City', 'Post Code', 'Country', 'IP', 'Status', 'Approved', 'Date Added', 'Customer Group');
+        $customers_column = array('Customer ID', 'Customer Name', 'Email', 'Telephone', 'Address', 'City', 'Post Code', 'Country', 'IP', 'Status', 'Approved', 'Date Added', 'Customer Group', 'Customer Group ID');
             
         $customers[0] = $customers_column;  
         
@@ -62,7 +62,7 @@ $this->data['export'] = $this->url->link('sale/customer/export', 'token=' . $thi
 			<search position="before" offset="0"><![CDATA[public function getCustomers($data = array()) {]]></search>
 			<add><![CDATA[public function getCustomerstoexport($data = array()) {
     	 
-$sql = "SELECT c.customer_id, CONCAT(c.firstname, ' ', c.lastname) AS name, c.email, c.telephone, CONCAT(oca.address_1,oca.address_2) AS address, oca.city, oca.postcode, occ.name as Country, c.ip, IF( c.status = 1, 'Enabled', 'Disabled' ) AS status, IF( c.approved = 1, 'Yes', 'No' ) AS approved, c.date_added, cgd.name AS customer_group FROM " . DB_PREFIX . "customer c LEFT JOIN " . DB_PREFIX . "customer_group_description cgd ON (c.customer_group_id = cgd.customer_group_id) LEFT JOIN " . DB_PREFIX . "address oca ON (c.address_id=oca.address_id) LEFT JOIN " . DB_PREFIX . "country occ ON (oca.country_id=occ.country_id) WHERE cgd.language_id = '" . (int)$this->config->get('config_language_id') . "'";
+$sql = "SELECT c.customer_id, CONCAT(c.firstname, ' ', c.lastname) AS name, c.email, c.telephone, CONCAT(oca.address_1,oca.address_2) AS address, oca.city, oca.postcode, occ.name as Country, c.ip, IF( c.status = 1, 'Enabled', 'Disabled' ) AS status, IF( c.approved = 1, 'Yes', 'No' ) AS approved, c.date_added, cgd.name AS customer_group, c.customer_group_id AS customer_group_id FROM " . DB_PREFIX . "customer c LEFT JOIN " . DB_PREFIX . "customer_group_description cgd ON (c.customer_group_id = cgd.customer_group_id) LEFT JOIN " . DB_PREFIX . "address oca ON (c.address_id=oca.address_id) LEFT JOIN " . DB_PREFIX . "country occ ON (oca.country_id=occ.country_id) WHERE cgd.language_id = '" . (int)$this->config->get('config_language_id') . "'";
 
 		$query = $this->db->query($sql);
         

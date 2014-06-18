@@ -1,20 +1,58 @@
 <?php
-class ControllerReportSaleOrder extends Controller { 
-	public function index() {  
-		$this->language->load('report/sale_order');
+class ControllerReportSaleReturn extends Controller {
+public function export() {
+				
+				$this->load->model('report/return');
+
+				$returns = array();
+
+				$data = array();
+
+				$results = $this->model_report_return->getReturns($data);
+				
+				foreach ($results as $result) {
+					$returns[] = array(
+						'date_start' => date($this->language->get('date_format_short'), strtotime($result['date_start'])),
+						'date_end'   => date($this->language->get('date_format_short'), strtotime($result['date_end'])),
+						'returns'    => $result['returns']
+					);
+				}
+				
+				$returns_data = array();
+				
+				$returns_column=array();
+				
+				$returns_column = array('Start Date', 'End Date', 'No. Returns');
+					
+				$returns_data[0]=   $returns_column;   
+				
+				foreach($returns as $returns_row)
+				{
+					$returns_data[]=   $returns_row;            
+				}     
+				require_once(DIR_SYSTEM . 'library/excel_xml.php');
+				$xls = new Excel_XML('UTF-8', false, 'Sales Returns Report');
+				
+				$xls->addArray($returns_data);
+				
+				$xls->generateXML('sales_returns_report_'.date('Y-m-d _ H:i:s'));	
+
+			}
+	public function index() {     
+		$this->language->load('report/sale_return');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
 		if (isset($this->request->get['filter_date_start'])) {
 			$filter_date_start = $this->request->get['filter_date_start'];
 		} else {
-			$filter_date_start = date('Y-m-d', strtotime(date('Y') . '-' . date('m') . '-01'));
+			$filter_date_start = '';
 		}
 
 		if (isset($this->request->get['filter_date_end'])) {
 			$filter_date_end = $this->request->get['filter_date_end'];
 		} else {
-			$filter_date_end = date('Y-m-d');
+			$filter_date_end = '';
 		}
 
 		if (isset($this->request->get['filter_group'])) {
@@ -22,17 +60,11 @@ class ControllerReportSaleOrder extends Controller {
 		} else {
 			$filter_group = 'week';
 		}
-		
-		if (isset($this->request->get['filter_customer_group'])) {
-			$filter_customer_group = $this->request->get['filter_customer_group'];
-		} else {
-			$filter_customer_group = '';
-		}
 
-		if (isset($this->request->get['filter_order_status_id'])) {
-			$filter_order_status_id = $this->request->get['filter_order_status_id'];
+		if (isset($this->request->get['filter_return_status_id'])) {
+			$filter_return_status_id = $this->request->get['filter_return_status_id'];
 		} else {
-			$filter_order_status_id = 0;
+			$filter_return_status_id = 0;
 		}	
 
 		if (isset($this->request->get['page'])) {
@@ -54,13 +86,9 @@ class ControllerReportSaleOrder extends Controller {
 		if (isset($this->request->get['filter_group'])) {
 			$url .= '&filter_group=' . $this->request->get['filter_group'];
 		}		
-		
-		if (isset($this->request->get['filter_customer_group'])) {
-			$url .= '&filter_customer_group=' . $this->request->get['filter_customer_group'];
-		}	
 
-		if (isset($this->request->get['filter_order_status_id'])) {
-			$url .= '&filter_order_status_id=' . $this->request->get['filter_order_status_id'];
+		if (isset($this->request->get['filter_return_status_id'])) {
+			$url .= '&filter_return_status_id=' . $this->request->get['filter_return_status_id'];
 		}
 
 		if (isset($this->request->get['page'])) {
@@ -71,42 +99,38 @@ class ControllerReportSaleOrder extends Controller {
 
 		$this->data['breadcrumbs'][] = array(
 			'text'      => $this->language->get('text_home'),
-			'href'      => $this->url->link('common/home', 'token=' . $this->session->data['token'], 'SSL'),       		
+			'href'      => $this->url->link('common/home', 'token=' . $this->session->data['token'], 'SSL'),
 			'separator' => false
 		);
 
 		$this->data['breadcrumbs'][] = array(
 			'text'      => $this->language->get('heading_title'),
-			'href'      => $this->url->link('report/sale_order', 'token=' . $this->session->data['token'] . $url, 'SSL'),
+			'href'      => $this->url->link('report/sale_return', 'token=' . $this->session->data['token'] . $url, 'SSL'),
 			'separator' => ' :: '
 		);
 
-		$this->load->model('report/sale');
+		$this->load->model('report/return');
 
-		$this->data['orders'] = array();
+		$this->data['returns'] = array();
 
 		$data = array(
-			'filter_date_start'	     => $filter_date_start, 
-			'filter_date_end'	     => $filter_date_end, 
-			'filter_group'           => $filter_group,
-			'filter_customer_group'  => $filter_customer_group,
-			'filter_order_status_id' => $filter_order_status_id,
-			'start'                  => ($page - 1) * $this->config->get('config_admin_limit'),
-			'limit'                  => $this->config->get('config_admin_limit')
+			'filter_date_start'	      => $filter_date_start, 
+			'filter_date_end'	      => $filter_date_end, 
+			'filter_group'            => $filter_group,
+			'filter_return_status_id' => $filter_return_status_id,
+			'start'                   => ($page - 1) * $this->config->get('config_admin_limit'),
+			'limit'                   => $this->config->get('config_admin_limit')
 		);
 
-		$order_total = $this->model_report_sale->getTotalOrders($data);
+		$return_total = $this->model_report_return->getTotalReturns($data);
 
-		$results = $this->model_report_sale->getOrders($data);
+		$results = $this->model_report_return->getReturns($data);
 
 		foreach ($results as $result) {
-			$this->data['orders'][] = array(
+			$this->data['returns'][] = array(
 				'date_start' => date($this->language->get('date_format_short'), strtotime($result['date_start'])),
 				'date_end'   => date($this->language->get('date_format_short'), strtotime($result['date_end'])),
-				'orders'     => $result['orders'],
-				'products'   => $result['products'],
-				'tax'        => $this->currency->format($result['tax'], $this->config->get('config_currency')),
-				'total'      => $this->currency->format($result['total'], $this->config->get('config_currency'))
+				'returns'    => $result['returns']
 			);
 		}
 
@@ -117,24 +141,23 @@ class ControllerReportSaleOrder extends Controller {
 
 		$this->data['column_date_start'] = $this->language->get('column_date_start');
 		$this->data['column_date_end'] = $this->language->get('column_date_end');
-		$this->data['column_orders'] = $this->language->get('column_orders');
-		$this->data['column_products'] = $this->language->get('column_products');
-		$this->data['column_tax'] = $this->language->get('column_tax');
+		$this->data['column_returns'] = $this->language->get('column_returns');
 		$this->data['column_total'] = $this->language->get('column_total');
 
 		$this->data['entry_date_start'] = $this->language->get('entry_date_start');
 		$this->data['entry_date_end'] = $this->language->get('entry_date_end');
 		$this->data['entry_group'] = $this->language->get('entry_group');	
 		$this->data['entry_status'] = $this->language->get('entry_status');
-		$this->data['entry_customer_group'] = $this->language->get('entry_customer_group');
 
+$this->data['button_export'] = $this->language->get('button_export');
+			$this->data['export'] = $this->url->link('report/sale_return/export', 'token=' . $this->session->data['token'], 'SSL');
 		$this->data['button_filter'] = $this->language->get('button_filter');
 
 		$this->data['token'] = $this->session->data['token'];
 
-		$this->load->model('localisation/order_status');
+		$this->load->model('localisation/return_status');
 
-		$this->data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+		$this->data['return_statuses'] = $this->model_localisation_return_status->getReturnStatuses();
 
 		$this->data['groups'] = array();
 
@@ -157,10 +180,6 @@ class ControllerReportSaleOrder extends Controller {
 			'text'  => $this->language->get('text_day'),
 			'value' => 'day',
 		);
-		
-		$this->load->model('sale/customer_group');
-		
-		$this->data['customer_groups'] = $this->model_sale_customer_group->getCustomerGroups();
 
 		$url = '';
 
@@ -174,32 +193,27 @@ class ControllerReportSaleOrder extends Controller {
 
 		if (isset($this->request->get['filter_group'])) {
 			$url .= '&filter_group=' . $this->request->get['filter_group'];
-		}	
-		
-		if (isset($this->request->get['filter_customer_group'])) {
-			$url .= '&filter_customer_group=' . $this->request->get['filter_customer_group'];
-		}	
+		}		
 
-		if (isset($this->request->get['filter_order_status_id'])) {
-			$url .= '&filter_order_status_id=' . $this->request->get['filter_order_status_id'];
+		if (isset($this->request->get['filter_return_status_id'])) {
+			$url .= '&filter_return_status_id=' . $this->request->get['filter_return_status_id'];
 		}
 
 		$pagination = new Pagination();
-		$pagination->total = $order_total;
+		$pagination->total = $return_total;
 		$pagination->page = $page;
 		$pagination->limit = $this->config->get('config_admin_limit');
 		$pagination->text = $this->language->get('text_pagination');
-		$pagination->url = $this->url->link('report/sale_order', 'token=' . $this->session->data['token'] . $url . '&page={page}', 'SSL');
+		$pagination->url = $this->url->link('report/sale_return', 'token=' . $this->session->data['token'] . $url . '&page={page}', 'SSL');
 
-		$this->data['pagination'] = $pagination->render();		
+		$this->data['pagination'] = $pagination->render();
 
 		$this->data['filter_date_start'] = $filter_date_start;
 		$this->data['filter_date_end'] = $filter_date_end;		
 		$this->data['filter_group'] = $filter_group;
-		$this->data['filter_customer_group'] = $filter_customer_group;
-		$this->data['filter_order_status_id'] = $filter_order_status_id;
+		$this->data['filter_return_status_id'] = $filter_return_status_id;
 
-		$this->template = 'report/sale_order.tpl';
+		$this->template = 'report/sale_return.tpl';
 		$this->children = array(
 			'common/header',
 			'common/footer'

@@ -1,5 +1,68 @@
 <?php
 class ControllerReportSaleCoupon extends Controller {
+public function export() {
+								
+				$this->load->model('report/coupon');
+
+				$coupons = array();
+
+				if (isset($this->request->get['filter_date_start'])) {
+					$filter_date_start = $this->request->get['filter_date_start'];
+				} else {
+					$filter_date_start = '';
+				}
+		
+				if (isset($this->request->get['filter_date_end'])) {
+					$filter_date_end = $this->request->get['filter_date_end'];
+				} else {
+					$filter_date_end = '';
+				}
+				
+				if (isset($this->request->get['filter_customer_group'])) {
+					$filter_customer_group = $this->request->get['filter_customer_group'];
+				} else {
+					$filter_customer_group = '';
+				}
+				
+				$data = array(
+					'filter_date_start'	=> $filter_date_start, 
+					'filter_date_end'	=> $filter_date_end, 
+					'filter_customer_group'  => $filter_customer_group,
+					'start'             => 0,
+					'limit'             => '9999'
+				);
+
+				$results = $this->model_report_coupon->getCoupons($data);
+				
+				foreach ($results as $result) {
+					$coupons[] = array(
+						'name'   => $result['name'],
+						'code'   => $result['code'],
+						'orders' => $result['orders'],
+						'total'  => $this->currency->format($result['total'], $this->config->get('config_currency'))
+					);
+				}
+				
+				$coupons_data = array();
+				
+				$coupons_column=array();
+				
+				$coupons_column = array('Coupon Name', 'Coupon Code', 'Orders', 'Total');
+					
+				$coupons_data[0]=   $coupons_column;   
+				
+				foreach($coupons as $coupons_row)
+				{
+					$coupons_data[]=   $coupons_row;            
+				}     
+				require_once(DIR_SYSTEM . 'library/excel_xml.php');
+				$xls = new Excel_XML('UTF-8', false, 'Sales Coupons Report');
+				
+				$xls->addArray($coupons_data);
+				
+				$xls->generateXML('sales_coupons_report_'.date('Y-m-d _ H:i:s'));	
+
+			}
 	public function index() {     
 		$this->language->load('report/sale_coupon');
 
@@ -108,6 +171,8 @@ class ControllerReportSaleCoupon extends Controller {
 		$this->data['entry_date_end'] = $this->language->get('entry_date_end');
 		$this->data['entry_customer_group'] = $this->language->get('entry_customer_group');
 
+$this->data['button_export'] = $this->language->get('button_export');
+			$this->data['export'] = $this->url->link('report/sale_coupon/export', 'token=' . $this->session->data['token']. $url , 'SSL');
 		$this->data['button_filter'] = $this->language->get('button_filter');
 
 		$this->data['token'] = $this->session->data['token'];

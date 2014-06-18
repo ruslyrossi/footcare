@@ -37,7 +37,19 @@
               <?php } ?>
               <?php } ?>
             </select></td>
-          <td style="text-align: right;"><a href="<?php echo $export; ?>" class="button"><?php echo $button_export; ?></a>&nbsp;<a onclick="filter();" class="button"><?php echo $button_filter; ?></a></td>
+            <td><?php echo $entry_customer_group; ?>
+              <select name="filter_customer_group">
+                <option value="">All</option>
+                <?php foreach ($customer_groups as $group) { ?>
+                <?php if ($group['customer_group_id'] == $filter_customer_group) { ?>
+                <option value="<?php echo $group['customer_group_id']; ?>" selected="selected"><?php echo $group['name']; ?></option>
+                <?php } else { ?>
+                <option value="<?php echo $group['customer_group_id']; ?>"><?php echo $group['name']; ?></option>
+                <?php } ?>
+                <?php } ?>
+              </select>
+              </td>
+          <td style="text-align: right;"><a onclick="filter();" class="button"><?php echo $button_filter; ?></a>&nbsp;<a href="<?php echo $export; ?>" class="button"><?php echo $button_export; ?></a></td>
         </tr>
       </table>
       <table class="list">
@@ -92,6 +104,12 @@ function filter() {
 	
 	if (filter_group) {
 		url += '&filter_group=' + encodeURIComponent(filter_group);
+	}
+	
+	var filter_customer_group = $('select[name=\'filter_customer_group\']').attr('value');
+	
+	if (filter_customer_group) {
+		url += '&filter_customer_group=' + encodeURIComponent(filter_customer_group);
 	}
 	
 	var filter_order_status_id = $('select[name=\'filter_order_status_id\']').attr('value');

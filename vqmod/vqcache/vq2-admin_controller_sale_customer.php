@@ -1416,7 +1416,7 @@ $this->data['button_export'] = $this->language->get('button_export');
         
         $this->load->model('sale/customer');
         
-        $customers_column = array('Customer ID', 'Customer Name', 'Email', 'Telephone', 'Address', 'City', 'Post Code', 'Country', 'IP', 'Status', 'Approved', 'Date Added', 'Customer Group');
+        $customers_column = array('Customer ID', 'Customer Name', 'Email', 'Telephone', 'Address', 'City', 'Post Code', 'Country', 'IP', 'Status', 'Approved', 'Date Added', 'Customer Group', 'Customer Group ID');
             
         $customers[0] = $customers_column;  
         

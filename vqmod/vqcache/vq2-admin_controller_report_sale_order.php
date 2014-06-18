@@ -5,8 +5,46 @@ public function export() {
 				$this->load->model('report/sale');
 
 				$orders = array();
-
-				$data = array();
+		
+				if (isset($this->request->get['filter_date_start'])) {
+					$filter_date_start = $this->request->get['filter_date_start'];
+				} else {
+					$filter_date_start = date('Y-m-d', strtotime(date('Y') . '-' . date('m') . '-01'));
+				}
+		
+				if (isset($this->request->get['filter_date_end'])) {
+					$filter_date_end = $this->request->get['filter_date_end'];
+				} else {
+					$filter_date_end = date('Y-m-d');
+				}
+		
+				if (isset($this->request->get['filter_group'])) {
+					$filter_group = $this->request->get['filter_group'];
+				} else {
+					$filter_group = 'week';
+				}
+				
+				if (isset($this->request->get['filter_customer_group'])) {
+					$filter_customer_group = $this->request->get['filter_customer_group'];
+				} else {
+					$filter_customer_group = '';
+				}
+		
+				if (isset($this->request->get['filter_order_status_id'])) {
+					$filter_order_status_id = $this->request->get['filter_order_status_id'];
+				} else {
+					$filter_order_status_id = 0;
+				}	
+				
+				$data = array(
+					'filter_date_start'	     => $filter_date_start, 
+					'filter_date_end'	     => $filter_date_end, 
+					'filter_group'           => $filter_group,
+					'filter_customer_group'  => $filter_customer_group,
+					'filter_order_status_id' => $filter_order_status_id,
+					'start'                  => 0,
+					'limit'                  => '9999'
+				);
 
 				$results = $this->model_report_sale->getOrders($data);
 
@@ -63,6 +101,12 @@ public function export() {
 		} else {
 			$filter_group = 'week';
 		}
+		
+		if (isset($this->request->get['filter_customer_group'])) {
+			$filter_customer_group = $this->request->get['filter_customer_group'];
+		} else {
+			$filter_customer_group = '';
+		}
 
 		if (isset($this->request->get['filter_order_status_id'])) {
 			$filter_order_status_id = $this->request->get['filter_order_status_id'];
@@ -89,6 +133,10 @@ public function export() {
 		if (isset($this->request->get['filter_group'])) {
 			$url .= '&filter_group=' . $this->request->get['filter_group'];
 		}		
+		
+		if (isset($this->request->get['filter_customer_group'])) {
+			$url .= '&filter_customer_group=' . $this->request->get['filter_customer_group'];
+		}	
 
 		if (isset($this->request->get['filter_order_status_id'])) {
 			$url .= '&filter_order_status_id=' . $this->request->get['filter_order_status_id'];
@@ -120,6 +168,7 @@ public function export() {
 			'filter_date_start'	     => $filter_date_start, 
 			'filter_date_end'	     => $filter_date_end, 
 			'filter_group'           => $filter_group,
+			'filter_customer_group'  => $filter_customer_group,
 			'filter_order_status_id' => $filter_order_status_id,
 			'start'                  => ($page - 1) * $this->config->get('config_admin_limit'),
 			'limit'                  => $this->config->get('config_admin_limit')
@@ -156,9 +205,10 @@ public function export() {
 		$this->data['entry_date_end'] = $this->language->get('entry_date_end');
 		$this->data['entry_group'] = $this->language->get('entry_group');	
 		$this->data['entry_status'] = $this->language->get('entry_status');
+		$this->data['entry_customer_group'] = $this->language->get('entry_customer_group');
 
 $this->data['button_export'] = $this->language->get('button_export');
-			$this->data['export'] = $this->url->link('report/sale_order/export', 'token=' . $this->session->data['token'], 'SSL');
+			$this->data['export'] = $this->url->link('report/sale_order/export', 'token=' . $this->session->data['token'] . $url , 'SSL');
 		$this->data['button_filter'] = $this->language->get('button_filter');
 
 		$this->data['token'] = $this->session->data['token'];
@@ -188,6 +238,10 @@ $this->data['button_export'] = $this->language->get('button_export');
 			'text'  => $this->language->get('text_day'),
 			'value' => 'day',
 		);
+		
+		$this->load->model('sale/customer_group');
+		
+		$this->data['customer_groups'] = $this->model_sale_customer_group->getCustomerGroups();
 
 		$url = '';
 
@@ -201,7 +255,11 @@ $this->data['button_export'] = $this->language->get('button_export');
 
 		if (isset($this->request->get['filter_group'])) {
 			$url .= '&filter_group=' . $this->request->get['filter_group'];
-		}		
+		}	
+		
+		if (isset($this->request->get['filter_customer_group'])) {
+			$url .= '&filter_customer_group=' . $this->request->get['filter_customer_group'];
+		}	
 
 		if (isset($this->request->get['filter_order_status_id'])) {
 			$url .= '&filter_order_status_id=' . $this->request->get['filter_order_status_id'];
@@ -219,6 +277,7 @@ $this->data['button_export'] = $this->language->get('button_export');
 		$this->data['filter_date_start'] = $filter_date_start;
 		$this->data['filter_date_end'] = $filter_date_end;		
 		$this->data['filter_group'] = $filter_group;
+		$this->data['filter_customer_group'] = $filter_customer_group;
 		$this->data['filter_order_status_id'] = $filter_order_status_id;
 
 		$this->template = 'report/sale_order.tpl';

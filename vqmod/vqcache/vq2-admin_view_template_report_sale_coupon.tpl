@@ -28,7 +28,7 @@
             <?php } ?>
           </select>
           </td>   
-          <td style="text-align: right;"><a onclick="filter();" class="button"><?php echo $button_filter; ?></a></td>
+          <td style="text-align: right;"><a onclick="filter();" class="button"><?php echo $button_filter; ?></a>&nbsp;<a href="<?php echo $export; ?>" class="button"><?php echo $button_export; ?></a></td>
         </tr>
       </table>
       <table class="list">

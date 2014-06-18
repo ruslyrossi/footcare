@@ -17,6 +17,10 @@ class ModelReportSale extends Model {
 			$sql .= " AND DATE(o.date_added) <= '" . $this->db->escape($data['filter_date_end']) . "'";
 		}
 		
+		if (!empty($data['filter_customer_group'])) {
+			$sql .= " AND customer_group_id = '" . $this->db->escape($data['filter_customer_group']) . "'";
+		}
+		
 		$sql .= " GROUP BY o.order_id) tmp";
 		
 		if (!empty($data['filter_group'])) {
@@ -219,6 +223,10 @@ class ModelReportSale extends Model {
 
 		if (!empty($data['filter_date_end'])) {
 			$sql .= " AND DATE(date_added) <= '" . $this->db->escape($data['filter_date_end']) . "'";
+		}
+		
+		if (!empty($data['filter_customer_group'])) {
+			$sql .= " AND customer_group_id = '" . $this->db->escape($data['filter_customer_group']) . "'";
 		}
 		
 		if (!empty($data['filter_group'])) {

@@ -22,6 +22,12 @@ class ControllerReportSaleShipping extends Controller {
 		} else {
 			$filter_group = 'week';
 		}
+		
+		if (isset($this->request->get['filter_customer_group'])) {
+			$filter_customer_group = $this->request->get['filter_customer_group'];
+		} else {
+			$filter_customer_group = '';
+		}
 
 		if (isset($this->request->get['filter_order_status_id'])) {
 			$filter_order_status_id = $this->request->get['filter_order_status_id'];
@@ -48,6 +54,10 @@ class ControllerReportSaleShipping extends Controller {
 		if (isset($this->request->get['filter_group'])) {
 			$url .= '&filter_group=' . $this->request->get['filter_group'];
 		}		
+		
+		if (isset($this->request->get['filter_customer_group'])) {
+			$url .= '&filter_customer_group=' . $this->request->get['filter_customer_group'];
+		}	
 
 		if (isset($this->request->get['filter_order_status_id'])) {
 			$url .= '&filter_order_status_id=' . $this->request->get['filter_order_status_id'];
@@ -79,6 +89,7 @@ class ControllerReportSaleShipping extends Controller {
 			'filter_date_start'	     => $filter_date_start, 
 			'filter_date_end'	     => $filter_date_end, 
 			'filter_group'           => $filter_group,
+			'filter_customer_group'  => $filter_customer_group,
 			'filter_order_status_id' => $filter_order_status_id,
 			'start'                  => ($page - 1) * $this->config->get('config_admin_limit'),
 			'limit'                  => $this->config->get('config_admin_limit')
@@ -113,6 +124,7 @@ class ControllerReportSaleShipping extends Controller {
 		$this->data['entry_date_end'] = $this->language->get('entry_date_end');
 		$this->data['entry_group'] = $this->language->get('entry_group');	
 		$this->data['entry_status'] = $this->language->get('entry_status');
+		$this->data['entry_customer_group'] = $this->language->get('entry_customer_group');
 
 		$this->data['button_filter'] = $this->language->get('button_filter');
 
@@ -143,6 +155,10 @@ class ControllerReportSaleShipping extends Controller {
 			'text'  => $this->language->get('text_day'),
 			'value' => 'day',
 		);
+		
+		$this->load->model('sale/customer_group');
+		
+		$this->data['customer_groups'] = $this->model_sale_customer_group->getCustomerGroups();
 
 		$url = '';
 
@@ -157,6 +173,10 @@ class ControllerReportSaleShipping extends Controller {
 		if (isset($this->request->get['filter_group'])) {
 			$url .= '&filter_group=' . $this->request->get['filter_group'];
 		}		
+		
+		if (isset($this->request->get['filter_customer_group'])) {
+			$url .= '&filter_customer_group=' . $this->request->get['filter_customer_group'];
+		}	
 
 		if (isset($this->request->get['filter_order_status_id'])) {
 			$url .= '&filter_order_status_id=' . $this->request->get['filter_order_status_id'];
@@ -174,6 +194,7 @@ class ControllerReportSaleShipping extends Controller {
 		$this->data['filter_date_start'] = $filter_date_start;
 		$this->data['filter_date_end'] = $filter_date_end;		
 		$this->data['filter_group'] = $filter_group;
+		$this->data['filter_customer_group'] = $filter_customer_group;
 		$this->data['filter_order_status_id'] = $filter_order_status_id;
 
 		$this->template = 'report/sale_shipping.tpl';

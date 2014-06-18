@@ -27,29 +27,17 @@
               <?php } ?>
             </select></td>
           <td><?php echo $entry_status; ?>
-            <select name="filter_order_status_id">
+            <select name="filter_return_status_id">
               <option value="0"><?php echo $text_all_status; ?></option>
-              <?php foreach ($order_statuses as $order_status) { ?>
-              <?php if ($order_status['order_status_id'] == $filter_order_status_id) { ?>
-              <option value="<?php echo $order_status['order_status_id']; ?>" selected="selected"><?php echo $order_status['name']; ?></option>
+              <?php foreach ($return_statuses as $return_status) { ?>
+              <?php if ($return_status['return_status_id'] == $filter_return_status_id) { ?>
+              <option value="<?php echo $return_status['return_status_id']; ?>" selected="selected"><?php echo $return_status['name']; ?></option>
               <?php } else { ?>
-              <option value="<?php echo $order_status['order_status_id']; ?>"><?php echo $order_status['name']; ?></option>
+              <option value="<?php echo $return_status['return_status_id']; ?>"><?php echo $return_status['name']; ?></option>
               <?php } ?>
               <?php } ?>
             </select></td>
-            <td><?php echo $entry_customer_group; ?>
-              <select name="filter_customer_group">
-                <option value="">All</option>
-                <?php foreach ($customer_groups as $group) { ?>
-                <?php if ($group['customer_group_id'] == $filter_customer_group) { ?>
-                <option value="<?php echo $group['customer_group_id']; ?>" selected="selected"><?php echo $group['name']; ?></option>
-                <?php } else { ?>
-                <option value="<?php echo $group['customer_group_id']; ?>"><?php echo $group['name']; ?></option>
-                <?php } ?>
-                <?php } ?>
-              </select>
-              </td>
-          <td style="text-align: right;"><a onclick="filter();" class="button"><?php echo $button_filter; ?></a></td>
+          <td style="text-align: right;"><a href="<?php echo $export; ?>" class="button"><?php echo $button_export; ?></a>&nbsp;<a onclick="filter();" class="button"><?php echo $button_filter; ?></a></td>
         </tr>
       </table>
       <table class="list">
@@ -57,25 +45,21 @@
           <tr>
             <td class="left"><?php echo $column_date_start; ?></td>
             <td class="left"><?php echo $column_date_end; ?></td>
-            <td class="left"><?php echo $column_title; ?></td>
-            <td class="right"><?php echo $column_orders; ?></td>
-            <td class="right"><?php echo $column_total; ?></td>
+            <td class="right"><?php echo $column_returns; ?></td>
           </tr>
         </thead>
         <tbody>
-          <?php if ($orders) { ?>
-          <?php foreach ($orders as $order) { ?>
+          <?php if ($returns) { ?>
+          <?php foreach ($returns as $return) { ?>
           <tr>
-            <td class="left"><?php echo $order['date_start']; ?></td>
-            <td class="left"><?php echo $order['date_end']; ?></td>
-            <td class="left"><?php echo $order['title']; ?></td>
-            <td class="right"><?php echo $order['orders']; ?></td>
-            <td class="right"><?php echo $order['total']; ?></td>
+            <td class="left"><?php echo $return['date_start']; ?></td>
+            <td class="left"><?php echo $return['date_end']; ?></td>
+            <td class="right"><?php echo $return['returns']; ?></td>
           </tr>
           <?php } ?>
           <?php } else { ?>
           <tr>
-            <td class="center" colspan="5"><?php echo $text_no_results; ?></td>
+            <td class="center" colspan="3"><?php echo $text_no_results; ?></td>
           </tr>
           <?php } ?>
         </tbody>
@@ -86,7 +70,7 @@
 </div>
 <script type="text/javascript"><!--
 function filter() {
-	url = 'index.php?route=report/sale_shipping&token=<?php echo $token; ?>';
+	url = 'index.php?route=report/sale_return&token=<?php echo $token; ?>';
 	
 	var filter_date_start = $('input[name=\'filter_date_start\']').attr('value');
 	
@@ -104,12 +88,6 @@ function filter() {
 	
 	if (filter_group) {
 		url += '&filter_group=' + encodeURIComponent(filter_group);
-	}
-	
-	var filter_customer_group = $('select[name=\'filter_customer_group\']').attr('value');
-	
-	if (filter_customer_group) {
-		url += '&filter_customer_group=' + encodeURIComponent(filter_customer_group);
 	}
 	
 	var filter_order_status_id = $('select[name=\'filter_order_status_id\']').attr('value');
